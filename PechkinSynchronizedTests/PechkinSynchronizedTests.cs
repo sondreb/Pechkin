@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Threading;
-using Common.Logging;
 using Pechkin;
 using Pechkin.Synchronized;
 using PechkinTests;
@@ -44,8 +43,6 @@ namespace PechkinSynchronizedTests
             NameValueCollection properties = new NameValueCollection();
             properties["showDateTime"] = "true";
 
-            LogManager.Adapter = new Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter(properties); 
-
             ThreadStart ts = () =>
                                  {
                                      lock (this)
@@ -53,21 +50,12 @@ namespace PechkinSynchronizedTests
                                          Thread.CurrentThread.Name = "test thread " + (_threadId++).ToString();
                                      }
 
-                                     ILog log = LogManager.GetCurrentClassLogger();
-                                     log.Trace("T:" + Thread.CurrentThread.Name + " Thread started");
-
                                      string html = GetResourceString("PechkinTests.Resources.page.html");
-
-                                     log.Trace("T:" + Thread.CurrentThread.Name + " Got resource string");
 
                                      SynchronizedPechkin c = ProduceTestObject(new GlobalConfig());
                                      //SimplePechkin c = new SimplePechkin(new GlobalConfig());
 
-                                     log.Trace("T:" + Thread.CurrentThread.Name + " Created converter, starting conversion");
-
                                      byte[] ret = c.Convert(html);
-
-                                     log.Trace("T:" + Thread.CurrentThread.Name + " Converted everything, " + c.ProgressString);
 
                                      Assert.NotNull(ret);
                                  };

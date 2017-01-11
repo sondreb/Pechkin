@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Concurrent;
-//using System.ComponentModel;
 using System.Threading;
-//using System.Windows.Threading;
-using Common.Logging;
 
 namespace Pechkin.Synchronized.Util
 {
@@ -28,8 +25,6 @@ namespace Pechkin.Synchronized.Util
             // result, filled out after it's executed
             public object Result;
         }
-
-        private readonly ILog _log = LogManager.GetCurrentClassLogger();
 
         private readonly Thread _thread;
         private readonly object _sync = new Object(); // we wait on this object
@@ -90,7 +85,7 @@ namespace Pechkin.Synchronized.Util
             }
             catch (Exception e)
             {
-                _log.Fatal("Exception in SynchronizedDispatcherThread \"" + Thread.CurrentThread.Name + "\"", e);
+				throw;
             }
         }
 
