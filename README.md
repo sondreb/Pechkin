@@ -9,8 +9,6 @@ Upgrades to use latest version of xunit, and compile only as x64 which is the on
 
 This version of the WkHtmlToPdf wrapper, removes support for external resources such as JS, CSS and images. You have to embed the style and images (base64 encoded) within the content of the HTML.
 
-Example: src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABA
-
 FAQ
 ---
 
@@ -24,6 +22,17 @@ You can override this setting by calling `SetPrintBackground(true)` on the `Obje
 
 **A:** The library have only been tested and developed for use with an Azure Service Fabric service. If you want a library to generate HTML to PDF using ASP.NET, check out the [TuesPechkin](https://github.com/tuespetre/TuesPechkin) library.
 
+### Q: Why can't I have links to external resources, such as images?
+
+**A:** This possibility have been removed, it relies on additional DLL files from OpenSSL, which are not included. You could look at the original Pechkin library and include those if needed.
+
+To embed images to PDF, base64 encode and put them into the HTML document like this: Example: src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABA
+
+### Q: PDF generation does not work, Exception Info: System.DllNotFoundException
+
+**A:** You need to manually install the C++ redist (64-bit) for PDF generation to work: [https://www.microsoft.com/en-us/download/details.aspx?id=53587](https://www.microsoft.com/en-us/download/details.aspx?id=53587)
+
+
 NuGet
 -----
 
@@ -31,6 +40,11 @@ PechinSF is not yet available on NuGet. Download the source and compile using Vi
 
 Usage
 -----
+
+To include Pechkin in your service, add a reference to **Pechkin.dll** and **Pechkin.Synchronized.dll**, then add the **wkhtmltox.dll** either as full file in root of your service project, or as a link. Then set the
+"Copy to Output Directory" to "Copy if newer". After you compile your project, verify of all those 3 .dll files are copied to your bin folder.
+
+You need to manually install the Microsoft Visual C++ 2015 Redistributable (64-bit) on your cluster virtual machines for pinvoke to work.
 
 Pechkin is both easy to use
 
